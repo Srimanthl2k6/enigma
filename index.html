@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engima Cybersecurity Workshop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #0d0;
+            font-family: 'Roboto Mono', monospace;
+            overflow-x: hidden;
+        }
+        canvas#matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .content-card {
+            background-color: rgba(0, 20, 0, 0.85);
+            border: 1px solid #0f0;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px #0f0;
+        }
+        .nav-link:hover {
+            color: #0f0;
+            background-color: rgba(0, 255, 0, 0.1);
+            text-shadow: 0 0 10px #0f0, 0 0 20px #0f0;
+        }
+        h1, h2, h3 {
+            text-shadow: 0 0 8px #0f0;
+        }
+        .active-link {
+            color: #0f0 !important;
+            background-color: rgba(0, 255, 0, 0.1);
+        }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #010101;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0a0;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0f0;
+        }
+        .osi-layer {
+            border: 1px solid #0f0;
+            padding: 0.75rem 1.5rem;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px #0f0;
+        }
+        .osi-layer:hover {
+            background-color: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 15px #0f0, 0 0 25px #0f0;
+            transform: scale(1.05);
+        }
+        #osi-modal.hidden {
+            display: none;
+        }
+        #modal-content {
+             opacity: 0;
+             transform: scale(0.95);
+             transition: opacity 300ms ease-out, transform 300ms ease-out;
+        }
+        #osi-modal:not(.hidden) #modal-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="relative z-10 min-h-screen">
+        <!-- Header and Navigation -->
+        <header class="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md border-b border-green-500/50 z-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="#home" class="text-2xl font-bold text-green-400 nav-link px-2">Engima</a>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#osi" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">OSI Model</a>
+                            <a href="#topologies" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Topologies</a>
+                            <a href="#ip-tcp" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">TCP/IP</a>
+                            <a href="#packet-tracer" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Packet Tracer</a>
+                            <a href="#sysadmin" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">SysAdmin</a>
+                            <a href="#hacking" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Ethical Hacking</a>
+                        </div>
+                    </div>
+                    <div class="md:hidden">
+                        <button id="mobile-menu-button" class="text-green-400 hover:text-white focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a href="#osi" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">OSI Model</a>
+                    <a href="#topologies" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">Topologies</a>
+                    <a href="#ip-tcp" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">TCP/IP</a>
+                    <a href="#packet-tracer" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">Packet Tracer</a>
+                    <a href="#sysadmin" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">SysAdmin</a>
+                    <a href="#hacking" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">Ethical Hacking</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+            <!-- Home Section -->
+            <section id="home" class="min-h-screen flex items-center justify-center text-center">
+                <div class="content-card p-8 rounded-lg max-w-3xl">
+                    <h1 class="text-4xl md:text-6xl font-bold text-green-400 mb-4">Welcome to Enigma</h1>
+                </div>
+            </section>
+
+            <!-- OSI Model Section -->
+            <section id="osi" class="mb-16 scroll-mt-20">
+                <div class="content-card p-6 md:p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold text-green-400 mb-6 text-center">The OSI Model</h2>
+                    <p class="text-gray-300 mb-8 text-center">The Open Systems Interconnection (OSI) model is a conceptual framework that standardizes network functions into seven abstract layers. Click on a layer to learn more.</p>
+                    
+                    <!-- Flowchart container -->
+                    <div class="flex flex-col items-center space-y-2">
+                        <!-- Layer 7 -->
+                        <div class="osi-layer cursor-pointer rounded-t-lg" data-layer="7">
+                            <h3 class="font-bold text-lg text-green-300">7. Application Layer</h3>
+                        </div>
+                        <div class="text-green-400 text-2xl font-mono">↓</div>
+                        <!-- Layer 6 -->
+                        <div class="osi-layer cursor-pointer" data-layer="6">
+                            <h3 class="font-bold text-lg text-green-300">6. Presentation Layer</h3>
+                        </div>
+                        <div class="text-green-400 text-2xl font-mono">↓</div>
+                        <!-- Layer 5 -->
+                        <div class="osi-layer cursor-pointer" data-layer="5">
+                             <h3 class="font-bold text-lg text-green-300">5. Session Layer</h3>
+                        </div>
+                        <div class="text-green-400 text-2xl font-mono">↓</div>
+                        <!-- Layer 4 -->
+                        <div class="osi-layer cursor-pointer" data-layer="4">
+                            <h3 class="font-bold text-lg text-green-300">4. Transport Layer</h3>
+                        </div>
+                        <div class="text-green-400 text-2xl font-mono">↓</div>
+                        <!-- Layer 3 -->
+                        <div class="osi-layer cursor-pointer" data-layer="3">
+                            <h3 class="font-bold text-lg text-green-300">3. Network Layer</h3>
+                        </div>
+                        <div class="text-green-400 text-2xl font-mono">↓</div>
+                        <!-- Layer 2 -->
+                        <div class="osi-layer cursor-pointer" data-layer="2">
+                             <h3 class="font-bold text-lg text-green-300">2. Data Link Layer</h3>
+                        </div>
+                        <div class="text-green-400 text-2xl font-mono">↓</div>
+                        <!-- Layer 1 -->
+                        <div class="osi-layer cursor-pointer rounded-b-lg" data-layer="1">
+                             <h3 class="font-bold text-lg text-green-300">1. Physical Layer</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Topologies Section -->
+            <section id="topologies" class="mb-16 scroll-mt-20">
+                <div class="content-card p-6 md:p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold text-green-400 mb-6 text-center">Network Topologies</h2>
+                    <p class="text-gray-300 mb-8 text-center">Network Topology is the schematic description of a network arrangement, connecting various nodes through lines of connection. Here are the most common types:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Bus Topology -->
+                        <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
+                            <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
+                                <line x1="10" y1="40" x2="110" y2="40" stroke="#0f0" stroke-width="2"></line>
+                                <line x1="20" y1="40" x2="20" y2="20" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="20" cy="15" r="5" fill="#0f0"></circle>
+                                <line x1="40" y1="40" x2="40" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="40" cy="65" r="5" fill="#0f0"></circle>
+                                <line x1="60" y1="40" x2="60" y2="20" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="60" cy="15" r="5" fill="#0f0"></circle>
+                                <line x1="80" y1="40" x2="80" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="80" cy="65" r="5" fill="#0f0"></circle>
+                                <line x1="100" y1="40" x2="100" y2="20" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="100" cy="15" r="5" fill="#0f0"></circle>
+                            </svg>
+                            <h3 class="font-bold text-lg text-green-300 mb-2">Bus Topology</h3>
+                            <p class="text-sm text-gray-400">Devices connect to a single central cable (the bus).</p>
+                        </div>
+            
+                        <!-- Star Topology -->
+                        <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
+                            <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
+                                <circle cx="60" cy="40" r="8" fill="#0f0" stroke="#0a0" stroke-width="2"></circle>
+                                <line x1="60" y1="40" x2="30" y2="15" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="25" cy="10" r="5" fill="#0f0"></circle>
+                                <line x1="60" y1="40" x2="90" y2="15" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="95" cy="10" r="5" fill="#0f0"></circle>
+                                <line x1="60" y1="40" x2="30" y2="65" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="25" cy="70" r="5" fill="#0f0"></circle>
+                                <line x1="60" y1="40" x2="90" y2="65" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="95" cy="70" r="5" fill="#0f0"></circle>
+                                <line x1="60" y1="40" x2="110" y2="40" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="115" cy="40" r="5" fill="#0f0"></circle>
+                            </svg>
+                            <h3 class="font-bold text-lg text-green-300 mb-2">Star Topology</h3>
+                            <p class="text-sm text-gray-400">All devices are connected to a central hub.</p>
+                        </div>
+            
+                        <!-- Ring Topology -->
+                        <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
+                            <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
+                                <circle cx="60" cy="40" r="30" stroke="#0f0" stroke-width="2" fill="none"></circle>
+                                <circle cx="60" cy="10" r="5" fill="#0f0"></circle>
+                                <circle cx="90" cy="28" r="5" fill="#0f0"></circle>
+                                <circle cx="30" cy="28" r="5" fill="#0f0"></circle>
+                                <circle cx="82" cy="62" r="5" fill="#0f0"></circle>
+                                <circle cx="38" cy="62" r="5" fill="#0f0"></circle>
+                            </svg>
+                            <h3 class="font-bold text-lg text-green-300 mb-2">Ring Topology</h3>
+                            <p class="text-sm text-gray-400">Each device is connected to two other devices in a ring.</p>
+                        </div>
+            
+                        <!-- Mesh Topology -->
+                        <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
+                             <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
+                                <defs>
+                                    <g id="mesh-node">
+                                        <circle r="5" fill="#0f0"></circle>
+                                    </g>
+                                </defs>
+                                <!-- Nodes -->
+                                <use href="#mesh-node" x="60" y="10"></use>
+                                <use href="#mesh-node" x="25" y="30"></use>
+                                <use href="#mesh-node" x="95" y="30"></use>
+                                <use href="#mesh-node" x="40" y="65"></use>
+                                <use href="#mesh-node" x="80" y="65"></use>
+                                <!-- Connections -->
+                                <path d="M 60 10 L 25 30 L 40 65 L 80 65 L 95 30 Z M 60 10 L 95 30 L 80 65 M 60 10 L 40 65 M 25 30 L 95 30 L 40 65 M 25 30 L 80 65" stroke="#0f0" stroke-width="1" fill="none"></path>
+                            </svg>
+                            <h3 class="font-bold text-lg text-green-300 mb-2">Mesh Topology</h3>
+                            <p class="text-sm text-gray-400">Every device is connected to every other device.</p>
+                        </div>
+            
+                        <!-- Hybrid Topology -->
+                        <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
+                            <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
+                                <!-- Bus -->
+                                <line x1="30" y1="40" x2="90" y2="40" stroke="#0f0" stroke-width="2"></line>
+                                <!-- Left Star -->
+                                <circle cx="30" cy="40" r="6" fill="#0a0"></circle>
+                                <line x1="30" y1="40" x2="10" y2="20" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="5" cy="17" r="4" fill="#0f0"></circle>
+                                <line x1="30" y1="40" x2="10" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="5" cy="63" r="4" fill="#0f0"></circle>
+                                <!-- Right Star -->
+                                <circle cx="90" cy="40" r="6" fill="#0a0"></circle>
+                                <line x1="90" y1="40" x2="110" y2="20" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="115" cy="17" r="4" fill="#0f0"></circle>
+                                <line x1="90" y1="40" x2="110" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+                                <circle cx="115" cy="63" r="4" fill="#0f0"></circle>
+                            </svg>
+                            <h3 class="font-bold text-lg text-green-300 mb-2">Hybrid Topology</h3>
+                            <p class="text-sm text-gray-400">A combination of two or more different topologies.</p>
+                        </div>
+                        
+                         <!-- Tree Topology -->
+                        <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
+                            <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
+                                <!-- Root Node -->
+                                <circle cx="60" cy="10" r="5" fill="#0f0"></circle>
+                                <!-- Level 1 Connections -->
+                                <line x1="60" y1="10" x2="35" y2="35" stroke="#0f0" stroke-width="1.5"></line>
+                                <line x1="60" y1="10" x2="85" y2="35" stroke="#0f0" stroke-width="1.5"></line>
+                                <!-- Level 1 Nodes -->
+                                <circle cx="35" cy="35" r="5" fill="#0f0"></circle>
+                                <circle cx="85" cy="35" r="5" fill="#0f0"></circle>
+                                <!-- Level 2 Connections -->
+                                <line x1="35" y1="35" x2="20" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+                                <line x1="35" y1="35" x2="50" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+                                <line x1="85" y1="35" x2="70" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+                                <line x1="85" y1="35" x2="100" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+                                <!-- Level 2 Nodes -->
+                                <circle cx="20" cy="60" r="5" fill="#0f0"></circle>
+                                <circle cx="50" cy="60" r="5" fill="#0f0"></circle>
+                                <circle cx="70" cy="60" r="5" fill="#0f0"></circle>
+                                <circle cx="100" cy="60" r="5" fill="#0f0"></circle>
+                            </svg>
+                            <h3 class="font-bold text-lg text-green-300 mb-2">Tree Topology</h3>
+                            <p class="text-sm text-gray-400">A hybrid topology with a central root node.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TCP/IP Section -->
+            <section id="ip-tcp" class="mb-16 scroll-mt-20">
+                <div class="content-card p-6 md:p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold text-green-400 mb-6 text-center">TCP/IP Explained</h2>
+                    <p class="text-gray-300 mb-8 text-center">The TCP/IP model is the foundation of the internet. It's a suite of communication protocols used to interconnect network devices. The two most important protocols are TCP and IP.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- TCP Column -->
+                        <div class="p-4 border border-green-700/50 rounded-lg bg-black/20">
+                            <h3 class="text-2xl text-green-300 mb-3 font-bold">TCP: Transmission Control Protocol</h3>
+                            <p class="text-gray-400 mb-4">TCP is responsible for ensuring the reliable, ordered, and error-checked delivery of a stream of data between applications running on hosts.</p>
+                            <h4 class="text-xl text-green-300 mb-2">How it works (The Three-Way Handshake):</h4>
+                            <ol class="list-decimal list-inside text-gray-400 space-y-2 text-sm">
+                                <li><strong>SYN:</strong> The client sends a SYN (synchronize) packet to the server to initiate a connection.</li>
+                                <li><strong>SYN-ACK:</strong> The server responds with a SYN-ACK (synchronize-acknowledgment) packet.</li>
+                                <li><strong>ACK:</strong> The client sends an ACK (acknowledgment) packet back to the server, establishing the connection.</li>
+                            </ol>
+                            <p class="mt-4 text-gray-300"><strong class="text-green-300">Key Feature:</strong> Connection-oriented. It's like making a phone call where you establish a connection before talking.</p>
+                        </div>
+                        <!-- IP Column -->
+                        <div class="p-4 border border-green-700/50 rounded-lg bg-black/20">
+                            <h3 class="text-2xl text-green-300 mb-3 font-bold">IP: Internet Protocol</h3>
+                            <p class="text-gray-400 mb-4">IP's job is to get packets from the source host to the destination host based on their IP addresses. It handles the addressing and routing of data.</p>
+                             <h4 class="text-xl text-green-300 mb-2">How it works:</h4>
+                             <p class="text-gray-400 text-sm">
+                                IP adds a header to each data packet that includes the source and destination IP addresses. Routers on the internet look at this destination address to forward the packet along the best path toward its final destination. IP doesn't guarantee delivery.
+                             </p>
+                            <p class="mt-4 text-gray-300"><strong class="text-green-300">Key Feature:</strong> Connectionless. It's like sending a letter in the mail. You send it off and hope it gets there, but there's no pre-established connection.</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center text-gray-300 border border-green-500/50 p-4 rounded-lg">
+                        <strong class="text-green-300">Working Together:</strong> IP is responsible for the delivery of packets to the right computer, while TCP is responsible for ensuring all the packets arrive in the correct order and without errors. They are the perfect team for reliable internet communication.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cisco Packet Tracer Section -->
+            <section id="packet-tracer" class="mb-16 scroll-mt-20">
+                <div class="content-card p-6 md:p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold text-green-400 mb-6">Cisco Packet Tracer</h2>
+                    <p class="text-gray-300 mb-4">Cisco Packet Tracer is a powerful network simulation tool that allows you to experiment with network behavior and ask “what if” questions. It provides a realistic simulation of functional networks, allowing you to build, configure, and troubleshoot complex network setups in a safe, virtual environment.</p>
+                    <h3 class="text-2xl text-green-300 mb-2">Why Use It?</h3>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li>Practice networking, IoT, and cybersecurity skills.</li>
+                        <li>Visualize internal processes of network devices in real-time.</li>
+                        <li>Build and configure virtual networks with a drag-and-drop interface.</li>
+                        <li>Prepare for Cisco certification exams.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- System Administration Section -->
+            <section id="sysadmin" class="mb-16 scroll-mt-20">
+                <div class="content-card p-6 md:p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold text-green-400 mb-6">Basics of System Administration</h2>
+                    <p class="text-gray-300 mb-4">A System Administrator (SysAdmin) is responsible for the upkeep, configuration, and reliable operation of computer systems, especially multi-user computers, such as servers.</p>
+                    <h3 class="text-2xl text-green-300 mb-2">Core Responsibilities:</h3>
+                     <ul class="list-disc list-inside text-gray-300 space-y-2">
+                        <li><strong class="text-green-300">User Management:</strong> Creating, deleting, and managing user accounts and permissions.</li>
+                        <li><strong class="text-green-300">Patch Management:</strong> Regularly updating systems and software to protect against vulnerabilities.</li>
+                        <li><strong class="text-green-300">Backups and Recovery:</strong> Ensuring data is backed up and can be restored in case of failure or attack.</li>
+                        <li><strong class="text-green-300">System Monitoring:</strong> Watching system performance and security to identify and fix issues proactively.</li>
+                        <li><strong class="text-green-300">Security Hardening:</strong> Configuring systems to be as secure as possible by disabling unnecessary services and strengthening configurations.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Ethical Hacking Section -->
+            <section id="hacking" class="scroll-mt-20">
+                <div class="content-card p-6 md:p-8 rounded-lg">
+                    <h2 class="text-3xl font-bold text-green-400 mb-6">Ethical Hacking</h2>
+                    <p class="text-gray-300 mb-4">Ethical hacking, also known as penetration testing, is the practice of legally breaking into computers and devices to test an organization's defenses. It's a proactive form of cybersecurity where security experts (ethical hackers) use the same tools and techniques as malicious attackers to find and fix security vulnerabilities before they can be exploited.</p>
+                    <h3 class="text-2xl text-green-300 mb-2">Phases of Hacking:</h3>
+                    <ol class="list-decimal list-inside text-gray-300 space-y-2">
+                        <li><strong>Reconnaissance:</strong> Gathering information about a target.</li>
+                        <li><strong>Scanning:</strong> Using tools to identify open ports, services, and vulnerabilities.</li>
+                        <li><strong>Gaining Access:</strong> Exploiting vulnerabilities to gain entry.</li>
+                        <li><strong>Maintaining Access:</strong> Installing backdoors to ensure persistent access.</li>
+                        <li><strong>Covering Tracks:</strong> Erasing logs and evidence of the intrusion.</li>
+                    </ol>
+                    <p class="mt-4 text-amber-400 font-bold border border-amber-400 p-3 rounded">Disclaimer: This information is for educational purposes only. Unauthorized hacking is illegal and unethical. Always have explicit permission before testing any system.</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- OSI Model Modal -->
+    <div id="osi-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div id="modal-content" class="content-card p-6 md:p-8 rounded-lg max-w-2xl w-full relative">
+            <button id="modal-close" class="absolute top-2 right-4 text-gray-400 hover:text-green-400 text-3xl font-bold">&times;</button>
+            <h3 id="modal-title" class="text-3xl font-bold text-green-400 mb-4"></h3>
+            <p id="modal-description" class="text-gray-300"></p>
+        </div>
+    </div>
+
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const alphabet = katakana + latin + nums;
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const rainDrops = [];
+
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+
+        setInterval(draw, 30);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Smooth scrolling for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // OSI Model Modal Logic
+        const osiLayerData = {
+          7: { 
+              title: '7. Application Layer', 
+              description: 'This is the top layer and the one closest to the end user. It provides services directly to user applications. When your web browser makes a request or you send an email, you are interacting with the Application Layer. Protocols like HTTP, FTP, SMTP, and DNS operate here.' 
+          },
+          6: { 
+              title: '6. Presentation Layer', 
+              description: 'This layer acts as a data translator for the network. It\'s responsible for translating, encrypting, and compressing data, ensuring that data sent from the application layer of one system can be read by the application layer of another. It handles data formatting and syntax.' 
+          },
+          5: { 
+              title: '5. Session Layer', 
+              description: 'The Session Layer is responsible for opening, closing, and managing the session (the connection) between two devices. It ensures the connection stays open long enough to transfer all the data and then closes it to avoid wasting resources. It also handles authentication and authorization.' 
+          },
+          4: { 
+              title: '4. Transport Layer', 
+              description: 'This layer provides end-to-end communication and error recovery. It takes data, breaks it into smaller chunks called segments, and sends them on. The two most common protocols here are TCP (Transmission Control Protocol), which is reliable and connection-oriented, and UDP (User Datagram Protocol), which is faster but less reliable.' 
+          },
+          3: { 
+              title: '3. Network Layer', 
+              description: 'The Network Layer is responsible for routing data packets from the source to the destination across multiple networks. It uses logical addressing (like IP addresses) to determine the best path for the data. Routers are the key devices that operate at this layer.' 
+          },
+          2: { 
+              title: '2. Data Link Layer', 
+              description: 'This layer provides node-to-node data transfer and handles error correction from the physical layer. It\'s divided into two sublayers: Media Access Control (MAC) and Logical Link Control (LLC). Switches operate here, using MAC addresses for physical addressing.' 
+          },
+          1: { 
+              title: '1. Physical Layer', 
+              description: 'The bottom layer of the OSI model, it is responsible for the actual physical connection between devices. It transmits the raw bitstream (ones and zeros) over a physical medium like copper wires, fiber optic cables, or wireless signals. Hubs, repeaters, and cables are all part of the Physical Layer.' 
+          },
+        };
+
+        const osiModal = document.getElementById('osi-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDescription = document.getElementById('modal-description');
+        const modalClose = document.getElementById('modal-close');
+        const osiLayers = document.querySelectorAll('.osi-layer');
+
+        osiLayers.forEach(layer => {
+            layer.addEventListener('click', () => {
+                const layerNumber = layer.getAttribute('data-layer');
+                const data = osiLayerData[layerNumber];
+                
+                modalTitle.textContent = data.title;
+                modalDescription.textContent = data.description;
+                
+                osiModal.classList.remove('hidden');
+            });
+        });
+
+        const closeModal = () => {
+            osiModal.classList.add('hidden');
+        };
+
+        modalClose.addEventListener('click', closeModal);
+        osiModal.addEventListener('click', (e) => {
+            if (e.target === osiModal) {
+                closeModal();
+            }
+        });
+
+        // Active link highlighting on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('header .nav-link');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5 
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active-link');
+                        if (link.getAttribute('href').substring(1) === entry.target.id) {
+                            link.classList.add('active-link');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+    </script>
+</body>
+</html>
