@@ -93,7 +93,6 @@
     <canvas id="matrix-canvas"></canvas>
 
     <div class="relative z-10 min-h-screen">
-        <!-- Header and Navigation -->
         <header class="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md border-b border-green-500/50 z-50">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -108,11 +107,9 @@
                                 <a href="#osi" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">OSI Model</a>
                                 <a href="#topologies" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Topologies</a>
                                 <a href="#packet-tracer" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Packet Tracer</a>
-                                <a href="#sysadmin" class="nav-link text-gray-300 px-3 py-2 rounded-md text-sm font-medium">SysAdmin</a>
                             </div>
                         </div>
 
-                        <!-- Fullscreen Button -->
                         <button id="fullscreen-btn" class="text-green-400 hover:text-white focus:outline-none p-2 rounded-md nav-link ml-4" title="Toggle Fullscreen">
                             <svg id="fullscreen-enter-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m0 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5h-4m0 0v-4m0 4l-5-5" />
@@ -132,7 +129,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Mobile menu -->
             <div id="mobile-menu" class="md:hidden hidden">
                 <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                     <a href="#ip" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">IP</a>
@@ -140,20 +136,17 @@
                     <a href="#osi" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">OSI Model</a>
                     <a href="#topologies" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">Topologies</a>
                     <a href="#packet-tracer" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">Packet Tracer</a>
-                    <a href="#sysadmin" class="nav-link text-gray-300 block px-3 py-2 rounded-md text-base font-medium">SysAdmin</a>
                 </div>
             </div>
         </header>
 
         <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
-            <!-- Home Section -->
             <section id="home" class="min-h-screen flex items-center justify-center text-center">
                 <div class="content-card p-8 rounded-lg max-w-3xl">
                     <h1 class="text-4xl md:text-6xl font-bold text-green-400 mb-4">Welcome to Enigma</h1>
                 </div>
             </section>
 
-            <!-- IP Section -->
             <section id="ip" class="mb-16 scroll-mt-20">
                  <div class="content-card p-6 md:p-8 rounded-lg">
                     <h2 class="text-3xl font-bold text-green-400 mb-6 text-center">IP: The Internet Protocol</h2>
@@ -209,13 +202,11 @@
                 </div>
             </section>
             
-            <!-- TCP/UDP Section -->
             <section id="tcp-udp" class="mb-16 scroll-mt-20">
                 <div class="content-card p-6 md:p-8 rounded-lg">
                     <h2 class="text-3xl font-bold text-green-400 mb-6 text-center">TCP & UDP Explained</h2>
                     <p class="text-gray-300 mb-8 text-center">TCP and UDP are core protocols of the Transport Layer that determine how data is sent between devices. They work on top of the Internet Protocol (IP).</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- TCP Column -->
                         <div class="p-4 border border-green-700/50 rounded-lg bg-black/20">
                             <h3 class="text-2xl text-green-300 mb-3 font-bold">TCP: Transmission Control Protocol</h3>
                             <p class="text-gray-400 mb-4">TCP is responsible for ensuring the reliable, ordered, and error-checked delivery of a stream of data.</p>
@@ -227,7 +218,6 @@
                             </ol>
                             <p class="mt-4 text-gray-300"><strong class="text-green-300">Key Feature:</strong> Connection-oriented. It's like a phone call where a connection is established before talking. Ideal for web browsing, email, and file transfers where accuracy is crucial.</p>
                         </div>
-                        <!-- UDP Column -->
                         <div class="p-4 border border-green-700/50 rounded-lg bg-black/20">
                             <h3 class="text-2xl text-green-300 mb-3 font-bold">UDP: User Datagram Protocol</h3>
                             <p class="text-gray-400 mb-4">UDP is a simpler, faster protocol that sends messages (datagrams) without establishing a prior connection.</p>
@@ -241,45 +231,36 @@
                 </div>
             </section>
 
-            <!-- OSI Model Section -->
             <section id="osi" class="mb-16 scroll-mt-20">
                 <div class="content-card p-6 md:p-8 rounded-lg">
                     <h2 class="text-3xl font-bold text-green-400 mb-6 text-center">The OSI Model</h2>
                     <p class="text-gray-300 mb-8 text-center">The Open Systems Interconnection (OSI) model is a conceptual framework that standardizes network functions into seven abstract layers. Click on a layer to learn more.</p>
                     
-                    <!-- Flowchart container -->
                     <div class="flex flex-col items-center space-y-2">
-                        <!-- Layer 7 -->
                         <div class="osi-layer cursor-pointer rounded-t-lg" data-layer="7">
                             <h3 class="font-bold text-lg text-green-300">7. Application Layer</h3>
                         </div>
                         <div class="text-green-400 text-2xl font-mono">↓</div>
-                        <!-- Layer 6 -->
                         <div class="osi-layer cursor-pointer" data-layer="6">
                             <h3 class="font-bold text-lg text-green-300">6. Presentation Layer</h3>
                         </div>
                         <div class="text-green-400 text-2xl font-mono">↓</div>
-                        <!-- Layer 5 -->
                         <div class="osi-layer cursor-pointer" data-layer="5">
                              <h3 class="font-bold text-lg text-green-300">5. Session Layer</h3>
                         </div>
                         <div class="text-green-400 text-2xl font-mono">↓</div>
-                        <!-- Layer 4 -->
                         <div class="osi-layer cursor-pointer" data-layer="4">
                             <h3 class="font-bold text-lg text-green-300">4. Transport Layer</h3>
                         </div>
                         <div class="text-green-400 text-2xl font-mono">↓</div>
-                        <!-- Layer 3 -->
                         <div class="osi-layer cursor-pointer" data-layer="3">
                             <h3 class="font-bold text-lg text-green-300">3. Network Layer</h3>
                         </div>
                         <div class="text-green-400 text-2xl font-mono">↓</div>
-                        <!-- Layer 2 -->
                         <div class="osi-layer cursor-pointer" data-layer="2">
                              <h3 class="font-bold text-lg text-green-300">2. Data Link Layer</h3>
                         </div>
                         <div class="text-green-400 text-2xl font-mono">↓</div>
-                        <!-- Layer 1 -->
                         <div class="osi-layer cursor-pointer rounded-b-lg" data-layer="1">
                              <h3 class="font-bold text-lg text-green-300">1. Physical Layer</h3>
                         </div>
@@ -287,14 +268,12 @@
                 </div>
             </section>
             
-            <!-- Topologies Section -->
             <section id="topologies" class="mb-16 scroll-mt-20">
                 <div class="content-card p-6 md:p-8 rounded-lg">
                     <h2 class="text-3xl font-bold text-green-400 mb-6 text-center">Network Topologies</h2>
                     <p class="text-gray-300 mb-8 text-center">Network Topology is the schematic description of a network arrangement, connecting various nodes through lines of connection. Here are the most common types:</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Bus Topology -->
                         <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
                             <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
                                 <line x1="10" y1="40" x2="110" y2="40" stroke="#0f0" stroke-width="2"></line>
@@ -313,7 +292,6 @@
                             <p class="text-sm text-gray-400">Devices connect to a single central cable (the bus).</p>
                         </div>
             
-                        <!-- Star Topology -->
                         <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
                             <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
                                 <circle cx="60" cy="40" r="8" fill="#0f0" stroke="#0a0" stroke-width="2"></circle>
@@ -332,7 +310,6 @@
                             <p class="text-sm text-gray-400">All devices are connected to a central hub.</p>
                         </div>
             
-                        <!-- Ring Topology -->
                         <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
                             <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
                                 <circle cx="60" cy="40" r="30" stroke="#0f0" stroke-width="2" fill="none"></circle>
@@ -346,7 +323,6 @@
                             <p class="text-sm text-gray-400">Each device is connected to two other devices in a ring.</p>
                         </div>
             
-                        <!-- Mesh Topology -->
                         <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
                              <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
                                 <defs>
@@ -354,31 +330,25 @@
                                         <circle r="5" fill="#0f0"></circle>
                                     </g>
                                 </defs>
-                                <!-- Nodes -->
                                 <use href="#mesh-node" x="60" y="10"></use>
                                 <use href="#mesh-node" x="25" y="30"></use>
                                 <use href="#mesh-node" x="95" y="30"></use>
                                 <use href="#mesh-node" x="40" y="65"></use>
                                 <use href="#mesh-node" x="80" y="65"></use>
-                                <!-- Connections -->
                                 <path d="M 60 10 L 25 30 L 40 65 L 80 65 L 95 30 Z M 60 10 L 95 30 L 80 65 M 60 10 L 40 65 M 25 30 L 95 30 L 40 65 M 25 30 L 80 65" stroke="#0f0" stroke-width="1" fill="none"></path>
                             </svg>
                             <h3 class="font-bold text-lg text-green-300 mb-2">Mesh Topology</h3>
                             <p class="text-sm text-gray-400">Every device is connected to every other device.</p>
                         </div>
             
-                        <!-- Hybrid Topology -->
                         <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
                             <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
-                                <!-- Bus -->
                                 <line x1="30" y1="40" x2="90" y2="40" stroke="#0f0" stroke-width="2"></line>
-                                <!-- Left Star -->
                                 <circle cx="30" cy="40" r="6" fill="#0a0"></circle>
                                 <line x1="30" y1="40" x2="10" y2="20" stroke="#0f0" stroke-width="1.5"></line>
                                 <circle cx="5" cy="17" r="4" fill="#0f0"></circle>
                                 <line x1="30" y1="40" x2="10" y2="60" stroke="#0f0" stroke-width="1.5"></line>
                                 <circle cx="5" cy="63" r="4" fill="#0f0"></circle>
-                                <!-- Right Star -->
                                 <circle cx="90" cy="40" r="6" fill="#0a0"></circle>
                                 <line x1="90" y1="40" x2="110" y2="20" stroke="#0f0" stroke-width="1.5"></line>
                                 <circle cx="115" cy="17" r="4" fill="#0f0"></circle>
@@ -389,23 +359,18 @@
                             <p class="text-sm text-gray-400">A combination of two or more different topologies.</p>
                         </div>
                         
-                         <!-- Tree Topology -->
-                        <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
+                         <div class="flex flex-col items-center text-center p-4 border border-green-700/50 rounded-lg bg-black/20">
                             <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="mb-4">
-                                <!-- Root Node -->
                                 <circle cx="60" cy="10" r="5" fill="#0f0"></circle>
-                                <!-- Level 1 Connections -->
                                 <line x1="60" y1="10" x2="35" y2="35" stroke="#0f0" stroke-width="1.5"></line>
                                 <line x1="60" y1="10" x2="85" y2="35" stroke="#0f0" stroke-width="1.5"></line>
-                                <!-- Level 1 Nodes -->
                                 <circle cx="35" cy="35" r="5" fill="#0f0"></circle>
                                 <circle cx="85" cy="35" r="5" fill="#0f0"></circle>
-                                <!-- Level 2 Connections -->
                                 <line x1="35" y1="35" x2="20" y2="60" stroke="#0f0" stroke-width="1.5"></line>
                                 <line x1="35" y1="35" x2="50" y2="60" stroke="#0f0" stroke-width="1.5"></line>
+
                                 <line x1="85" y1="35" x2="70" y2="60" stroke="#0f0" stroke-width="1.5"></line>
                                 <line x1="85" y1="35" x2="100" y2="60" stroke="#0f0" stroke-width="1.5"></line>
-                                <!-- Level 2 Nodes -->
                                 <circle cx="20" cy="60" r="5" fill="#0f0"></circle>
                                 <circle cx="50" cy="60" r="5" fill="#0f0"></circle>
                                 <circle cx="70" cy="60" r="5" fill="#0f0"></circle>
@@ -418,7 +383,6 @@
                 </div>
             </section>
 
-            <!-- Cisco Packet Tracer Section -->
             <section id="packet-tracer" class="mb-16 scroll-mt-20">
                 <div class="content-card p-6 md:p-8 rounded-lg">
                     <h2 class="text-3xl font-bold text-green-400 mb-6">Cisco Packet Tracer</h2>
@@ -433,26 +397,9 @@
                 </div>
             </section>
 
-            <!-- System Administration Section -->
-            <section id="sysadmin" class="scroll-mt-20">
-                <div class="content-card p-6 md:p-8 rounded-lg">
-                    <h2 class="text-3xl font-bold text-green-400 mb-6">Basics of System Administration</h2>
-                    <p class="text-gray-300 mb-4">A System Administrator (SysAdmin) is responsible for the upkeep, configuration, and reliable operation of computer systems, especially multi-user computers, such as servers.</p>
-                    <h3 class="text-2xl text-green-300 mb-2">Core Responsibilities:</h3>
-                     <ul class="list-disc list-inside text-gray-300 space-y-2">
-                        <li><strong class="text-green-300">User Management:</strong> Creating, deleting, and managing user accounts and permissions.</li>
-                        <li><strong class="text-green-300">Patch Management:</strong> Regularly updating systems and software to protect against vulnerabilities.</li>
-                        <li><strong class="text-green-300">Backups and Recovery:</strong> Ensuring data is backed up and can be restored in case of failure or attack.</li>
-                        <li><strong class="text-green-300">System Monitoring:</strong> Watching system performance and security to identify and fix issues proactively.</li>
-                        <li><strong class="text-green-300">Security Hardening:</strong> Configuring systems to be as secure as possible by disabling unnecessary services and strengthening configurations.</li>
-                    </ul>
-                </div>
-            </section>
-
         </main>
     </div>
 
-    <!-- OSI Model Modal -->
     <div id="osi-modal" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
         <div id="modal-content" class="content-card p-6 md:p-8 rounded-lg max-w-2xl w-full relative">
             <button id="modal-close" class="absolute top-2 right-4 text-gray-400 hover:text-green-400 text-3xl font-bold">&times;</button>
